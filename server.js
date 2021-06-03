@@ -56,6 +56,28 @@ app.post('/updateTodo', async (req, res) => {
   }
 })
 
+// 完成todos
+app.post('/finishTodo', async (req, res) => {
+  const { id, is_finish } = req.body
+
+  // 入参校验
+  if(id === undefined || is_finish === undefined) {
+    return res.status(500).send({
+      code: 500,
+      msg: `The field '${id === undefined ? 'id' : 'is_finish'}' is required.`
+    })
+  }
+
+  // 更新数据
+  const updateRes = await db.exec('todos', 'UPDATE', +is_finish, 'is_finish', 'id', id)
+
+  if(updateRes.code == 200) {
+    res.send(updateRes)
+  } else {
+    res.status(500).send(updateRes)
+  }
+})
+
 // 新增todos
 app.post('/addTodo', async (req, res) => {
   const { content } = req.body
