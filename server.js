@@ -1,7 +1,7 @@
 const express = require('express')
 const DB = require('./utils/db.js')
 
-const port = 5555 // 设置端口号
+const port = 3001 // 设置端口号
 const app = express()
 const db = new DB()
 
@@ -28,7 +28,7 @@ app.get('/getTodosList', (req, res) => {
     // 排除已经物理删除的todo 
     const datas = data.datas.filter(item => !item.is_del)
     
-    res.send({ code, data: datas })
+    res.send({ code, data: datas.reverse() })
   } else {
     res.status(code).send({code, msg: 'System Error.'})
   }
