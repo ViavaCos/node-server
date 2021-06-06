@@ -24,10 +24,14 @@ app.get('/', (req, res) => {
 // 获取todos
 app.get('/getTodosList', (req, res) => {
   const { code, data } = db.query('todos')
+  const { keywords } = req.query
   if(code === 200){
     // 排除已经物理删除的todo 
-    const datas = data.datas.filter(item => !item.is_del)
+    let datas = data.datas.filter(item => !item.is_del)
     
+    if(keywords.trim()) {
+      datas = datas.filter(item => item.content.toLocaleLowerCase().includes(keywords.toLocaleLowerCase()))
+    }
     res.send({ code, data: datas })
   } else {
     res.status(code).send({code, msg: 'System Error.'})
@@ -48,6 +52,28 @@ app.post('/updateTodo', async (req, res) => {
 
   // 更新数据
   const updateRes = await db.exec('todos', 'UPDATE', content, 'content', 'id', id)
+
+  if(updateRes.code == 200) {
+    res.send(updateRes)
+  } else {
+    res.status(500).send(updateRes)
+  }
+})
+
+// 完成todos
+app.post('/finishTodo', async (req, res) => {
+  const { id, is_finish } = req.body
+
+  // 入参校验
+  if(id === undefined || is_finish === undefined) {
+    return res.status(500).send({
+      code: 500,
+      msg: `The field '${id === undefined ? 'id' : 'is_finish'}' is required.`
+    })
+  }
+
+  // 更新数据
+  const updateRes = await db.exec('todos', 'UPDATE', +is_finish, 'is_finish', 'id', id)
 
   if(updateRes.code == 200) {
     res.send(updateRes)
