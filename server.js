@@ -1,7 +1,7 @@
 const express = require('express')
 const DB = require('./utils/db.js')
 
-const port = 5555 // 设置端口号
+const port = 3001 // 设置端口号
 const app = express()
 const db = new DB()
 
@@ -32,7 +32,7 @@ app.get('/getTodosList', (req, res) => {
     if(keywords.trim()) {
       datas = datas.filter(item => item.content.toLocaleLowerCase().includes(keywords.toLocaleLowerCase()))
     }
-    res.send({ code, data: datas })
+    res.send({ code, data: datas.reverse() })
   } else {
     res.status(code).send({code, msg: 'System Error.'})
   }
