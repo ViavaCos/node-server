@@ -24,10 +24,14 @@ app.get('/', (req, res) => {
 // 获取todos
 app.get('/getTodosList', (req, res) => {
   const { code, data } = db.query('todos')
+  const { keywords } = req.query
   if(code === 200){
     // 排除已经物理删除的todo 
-    const datas = data.datas.filter(item => !item.is_del)
+    let datas = data.datas.filter(item => !item.is_del)
     
+    if(keywords.trim()) {
+      datas = datas.filter(item => item.content.toLocaleLowerCase().includes(keywords.toLocaleLowerCase()))
+    }
     res.send({ code, data: datas.reverse() })
   } else {
     res.status(code).send({code, msg: 'System Error.'})
