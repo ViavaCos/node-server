@@ -21,3 +21,6 @@ function exeSql(sql) {
 }
 
 module.exports = exeSql;
+
+
+// todo修改返回参数格式 code, data

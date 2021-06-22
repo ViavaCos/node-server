@@ -1,5 +1,6 @@
 const express = require('express')
 const DB = require('./utils/db.js')
+// const Todos = require('./controller/todos.js')
 
 const port = 3001 // 设置端口号
 const app = express()
@@ -20,6 +21,8 @@ app.use(express.urlencoded({extended: true})) // application/x-www-form-urlencod
 app.get('/', (req, res) => {
   res.send('Welcome to this todos.')
 })
+
+// new Todos(app)
 
 // 获取todos
 app.get('/getTodosList', (req, res) => {
