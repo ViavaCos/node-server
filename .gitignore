@@ -1,2 +1,8 @@
+# 依赖文件
 node_modules
+
+# 配置文件
 _config
+
+# 数据库文件
+db

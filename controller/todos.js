@@ -2,10 +2,10 @@ const DB = require('../utils/db.js')
 const db = new DB()
 
 class Todos {
-    constrcutor(app){
+    constructor(app){
         // 获取todos
         app.get('/getTodosList', (req, res) => {
-            // const { code, data } = db.query('todos')
+            const { code, data } = db.query('todos')
             const { keywords } = req.query
             if(code === 200){
                 // 排除已经物理删除的todo 
@@ -73,17 +73,17 @@ class Todos {
             } else {
                 res.status(500).send(addRes)
             }
-            })
+        })
 
-            // 删除todos
-            app.delete('/deleteTodo', async (req, res) => {
-            const { id } = req.body
-            const deleteRes = await db.exec('todos', 'DELETE', id, 'id')
-            if(deleteRes.code == 200) {
-                res.send(deleteRes)
-            } else {
-                res.status(500).send(deleteRes)
-            }
+        // 删除todos
+        app.delete('/deleteTodo', async (req, res) => {
+        const { id } = req.body
+        const deleteRes = await db.exec('todos', 'DELETE', id, 'id')
+        if(deleteRes.code == 200) {
+            res.send(deleteRes)
+        } else {
+            res.status(500).send(deleteRes)
+        }
         })
     }
 }
