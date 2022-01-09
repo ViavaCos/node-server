@@ -1,5 +1,6 @@
 const express = require('express')
 const Todos = require('./controller/todos.js')
+const Words = require('./controller/words.js')
 
 const port = 3001 // 设置端口号
 const app = express()
@@ -21,6 +22,7 @@ app.get('/', (req, res) => {
 })
 
 new Todos(app)
+new Words(app)
 
 app.listen(port, function(){
   console.log(`Server is running in port: ${port}!`)
