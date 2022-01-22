@@ -1,23 +1,29 @@
 const DB = require('../utils/db.js')
 const db = new DB()
+// const exeSql = require('../utils/exeSql.js')
 
 class Todos {
     constructor(app){
         // 获取todos
-        app.get('/getTodosList', (req, res) => {
+        app.get('/getTodosList', async (req, res) => {
             const { code, data } = db.query('todos')
             const { keywords } = req.query
             if(code === 200){
                 // 排除已经物理删除的todo 
                 let datas = data.datas.filter(item => !item.is_del)
                 
-                if(keywords.trim()) {
+                if(keywords && keywords.trim()) {
                 datas = datas.filter(item => item.content.toLocaleLowerCase().includes(keywords.toLocaleLowerCase()))
                 }
                 res.send({ code, data: datas.reverse() })
             } else {
                 res.status(code).send({code, msg: 'System Error.'})
             }
+            // exeSql('SELECT * FROM todos_info').then(result => {
+            //     res.send({ code:200, data: result })
+            // }).catch(err => {
+            //     res.status(500).send({code: 500, msg: err})
+            // })
         })
 
         // 更新todos
@@ -77,13 +83,13 @@ class Todos {
 
         // 删除todos
         app.delete('/deleteTodo', async (req, res) => {
-        const { id } = req.body
-        const deleteRes = await db.exec('todos', 'DELETE', id, 'id')
-        if(deleteRes.code == 200) {
-            res.send(deleteRes)
-        } else {
-            res.status(500).send(deleteRes)
-        }
+            const { id } = req.body
+            const deleteRes = await db.exec('todos', 'DELETE', id, 'id')
+            if(deleteRes.code == 200) {
+                res.send(deleteRes)
+            } else {
+                res.status(500).send(deleteRes)
+            }
         })
     }
 }

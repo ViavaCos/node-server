@@ -3,6 +3,10 @@ node_modules
 
 # 配置文件
 _config
+cert
 
 # 数据库文件
 db
+
+# 文件上传目录
+uploads

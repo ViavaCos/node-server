@@ -1,4 +1,4 @@
-import accountInfo from '../_config/database'
+const accountInfo = require('../_config/database.js')
 
 // 执行给定的sql语句，执行完成之后，调用callback函数
 var mysql = require('mysql');
