@@ -17,6 +17,8 @@ app.all('*', (req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   // 允许各种请求方式
   res.setHeader('Access-Control-Allow-Methods', '*')
+  // 允许各种请求头
+  res.header("Access-Control-Allow-Headers", "*");
   next()
 })
 
