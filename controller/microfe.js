@@ -16,14 +16,14 @@
       {
         name: 'vtodos', // app name registered
         label: '微土豆',
-        entry: '//viavacos.live/vTodos/',
+        entry: '//viavacos.live/subapp/vtodos/',
         container: '#container-wrapper',
         activeRule: '/subapp/vtodos/'
       },
       {
         name: 'demo-runner-with-vue2', // app name registered
         label: 'Vue2示例',
-        entry: '//viavacos.live/demo-runner-with-vue2/',
+        entry: '//viavacos.live//subapp/demo-runner-with-vue2/',
         container: '#container-wrapper',
         activeRule: '/subapp/demo-runner-with-vue2/'
       }
