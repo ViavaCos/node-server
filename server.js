@@ -8,6 +8,7 @@ const Words = require('./controller/words.js')
 const Test = require('./controller/test.js')
 const MYRSA = require('./controller/rsa.js')
 const Microfe = require('./controller/microfe.js')
+const Interview = require('./controller/interview.js')
 
 const port = 3001 // 设置端口号
 const app = express()
@@ -37,6 +38,7 @@ new Words(app) // 鸡汤
 new Test(app) // 测试
 new MYRSA(app) // 加密
 new Microfe(app) // 微前端
+new Interview(app)
 
 // app.listen(port, function(){
 //   console.log(`Server is running in port: ${port}!`)
