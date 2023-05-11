@@ -13,7 +13,10 @@ class Interview extends Baisc {
     super(app)
 
     this.getQuestionTypes()
-    this.getQuestionByTypes()
+    this.getQuestionTypesAndNums()
+    this.getRandomQuestionByTypes()
+    this.getAllQuestionByType()
+    this.getQuestionDetailById()
   }
 
   /**
@@ -43,10 +46,27 @@ class Interview extends Baisc {
   }
 
   /**
+ * 获取问题类型和对应的数量
+ */
+  getQuestionTypesAndNums() {
+    this.app.get('/getQuestionTypesAndNums', (req, res) => {
+      exeSql('SELECT question_type,COUNT(*) FROM questions_info group by question_type').then(result => {
+        const typesArr = result.map(i => ({
+          type_name: i.question_type,
+          type_num: i["COUNT(*)"]
+        }))
+        res.send({ code:200, data: typesArr })
+      }).catch(err => {
+        res.status(500).send({code: 500, msg: err})
+      })
+    })
+  }
+
+  /**
    * 根据问题类型随机获取问题
    */
-  getQuestionByTypes() {
-    this.app.get('/getQuestionByTypes', (req, res) => {
+  getRandomQuestionByTypes() {
+    this.app.get('/getRandomQuestionByTypes', (req, res) => {
       const { types, doneIds } = req.query
       if (!types || typeof types !== 'string') {
         return res.status(500).send({code: 400, msg: 'Type is invalid.'})
@@ -68,7 +88,8 @@ class Interview extends Baisc {
           questions_info 
         WHERE
           question_type = '${resultType}' 
-          AND question_is_del = 0
+        AND
+          question_is_del = 0
           ${ doneIds ? `AND question_id not in (${doneIds})` : '' }
       `
       exeSql(sqlStatement).then(result => {
@@ -80,6 +101,67 @@ class Interview extends Baisc {
         singleResult.is_no_more = formattedAnswer ? 0 : 1
 
         res.send({ code:200, data: singleResult })
+      }).catch(err => {
+        res.status(500).send({code: 500, msg: err})
+      })
+    })
+  }
+
+  /**
+   * 根据问题类型获取所有问题
+   */
+  getAllQuestionByType() {
+    this.app.get('/getAllQuestionByType', (req, res) => {
+      const { type } = req.query
+      if (!type || typeof type !== 'string') {
+        return res.status(500).send({code: 400, msg: 'Type is invalid.'})
+      }
+
+      const sqlStatement = `
+        SELECT
+          question_id,
+          question_type,
+          question_description
+        FROM
+          questions_info 
+        WHERE
+          question_type = '${type}' 
+        AND
+          question_is_del = 0
+      `
+      exeSql(sqlStatement).then(result => {
+        res.send({ code:200, data: result })
+      }).catch(err => {
+        res.status(500).send({code: 500, msg: err})
+      })
+    })
+  }
+
+  /**
+   * 根据问题类型获取所有问题
+   */
+  getQuestionDetailById() {
+    this.app.get('/getQuestionDetailById', (req, res) => {
+      const { id } = req.query
+      if (!id) {
+        return res.status(500).send({code: 400, msg: 'Type is invalid.'})
+      }
+
+      const sqlStatement = `
+        SELECT
+          question_id,
+          question_type,
+          question_description,
+          question_answer
+        FROM
+          questions_info 
+        WHERE
+          question_id = '${id}' 
+        AND
+          question_is_del = 0
+      `
+      exeSql(sqlStatement).then(result => {
+        res.send({ code:200, data: result })
       }).catch(err => {
         res.status(500).send({code: 500, msg: err})
       })
